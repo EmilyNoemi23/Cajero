@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cajero Automatico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="./CajeroAutom.css">
+</head>
+
+<body>
+    <main>
+        <h1>Cajero Automático</h1>
+        <section style="margin: 25px;" class="login">
+
+            <div class="mb-3" id="form">
+                <label for="user">
+                    <input type="text" class="form-control" id="user" placeholder="Usuario">
+                </label>
+            </div>
+
+            <div class="mb-3" id="form">
+                <label for="pass">
+                    <input type="password" class="form-control" id="pass" placeholder="Contraseña">
+                </label>
+            </div>
+
+            <div class="d-grid gap-2 col-8 mx-auto">
+                <button type="button" class="btn btn-primary" id="botoninicio"> Iniciar sesión </button>
+            </div>
+        </section>
+
+        <div id="botonOpciones" style="display: none">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-primary" type="button" id="botonSaldo"> Consultar saldo </button>
+            </div>
+            <br>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-primary" type="button" id="botonIngresar"> Ingresar monto </button>
+            </div>
+            <br>
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-primary" type="button" id="botonRetirar"> Retirar monto </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        var cuentas = [
+            { nombre: "Emily", saldo: 500, password: "contra1" },
+            { nombre: "Sofia", saldo: 190, password: "contra2" },
+            { nombre: "Vicente", saldo: 250, password: "contra3" },
+        ];
+
+        let cuentaSeleccionada = null;
+
+        function validarCredenciales(nombre, password) {
+            for (let i = 0; i < cuentas.length; i++) {
+                if (cuentas[i].nombre === nombre && cuentas[i].password === password) {
+                    cuentaSeleccionada = cuentas[i];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function verificarSaldo() {
+            if (cuentaSeleccionada) {
+                alert(`Tu saldo actual es de: $${cuentaSeleccionada.saldo}`);
+            } else {
+                alert("Inicia sesión primero.");
+            }
+        }
+
+        function depositarSaldo(monto) {
+            if (cuentaSeleccionada) {
+                if (monto > 0) {
+                    cuentaSeleccionada.saldo += parseInt(monto);
+                    alert(`Depósito exitoso. Tu nuevo saldo es: $${cuentaSeleccionada.saldo}`);
+                } else {
+                    alert("Ingrese un monto válido para depositar.");
+                }
+            } else {
+                alert("Inicia sesión primero.");
+            }
+        }
+
+        function retirarSaldo(monto) {
+            if (cuentaSeleccionada) {
+                if (monto > 0 && monto <= cuentaSeleccionada.saldo) {
+                    cuentaSeleccionada.saldo -= parseInt(monto);
+                    alert(`Retiro exitoso. Tu nuevo saldo es: $${cuentaSeleccionada.saldo}`);
+                } else {
+                    alert("Saldo insuficiente o monto inválido para el retiro.");
+                }
+            } else {
+                alert("Inicia sesión primero.");
+            }
+        }
+
+        document.getElementById("botoninicio").addEventListener("click", function() {
+            let nombre = document.getElementById("user").value;
+            let pass = document.getElementById("pass").value;
+            if (validarCredenciales(nombre, pass)) {
+                document.getElementById("form").style.display = "none";
+                document.getElementById("botonOpciones").style.display = "block";
+            } else {
+                alert("Nombre de usuario o contraseña incorrectos.");
+            }
+        });
+
+        document.getElementById("botonSaldo").addEventListener("click", function() {
+            verificarSaldo();
+        });
+
+        document.getElementById("botonIngresar").addEventListener("click", function() {
+            let capital = prompt("Ingresa la cantidad que deseas depositar:");
+            depositarSaldo(capital);
+        });
+
+        document.getElementById("botonRetirar").addEventListener("click", function() {
+            let retiro = prompt("Ingresa la cantidad que deseas retirar:");
+            retirarSaldo(retiro);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
+
